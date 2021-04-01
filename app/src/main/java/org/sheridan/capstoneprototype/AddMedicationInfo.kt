@@ -27,34 +27,32 @@ class AddMedicationInfo : AppCompatActivity() {
 
         binding.addMedButton.setOnClickListener {
 
-//            var medName = binding.editMed.text.toString()
-//            var medDosage = binding.editDosage.text.toString().toInt()
-//            var medFrequency = binding.editFrequency.text.toString().toInt()
-//            var medQuantity = binding.editQuantity.text.toString().toInt()
-//            var medDescription = binding.editDescription.text.toString()
+            var fullName = binding.editMed.text.toString()
+            var userDosage = if (binding.editDosage.text.toString().isNotEmpty()) binding.editDosage.text.toString().toInt() else -1
+            var userfrequency = if (binding.editFrequency.text.toString().isNotEmpty()) binding.editFrequency.text.toString().toInt() else -1
+            var userQuantity = if (binding.editQuantity.text.toString().isNotEmpty()) binding.editQuantity.text.toString().toInt() else -1
+            var medDescription = binding.editDescription.text.toString()
 
-            val medicine = MedicineEntity(
-                    0,
-                    fullName = "testMed",
-                    userDosage = 5,
-                    userfrequency =  3,
-                    userQuantity =  6,
-                    medDescription = "Its a med to help you get good grades"
-            )
-            doAsync {
-                // do things in the background  // (1)
-                mDb.MedicineDao().insert(medicine)     // Put the student in database
-                uiThread {
-                    // make changes to the UI   // (2)
-                    toast("Record : " + medicine.fullName + " inserted.")
+            if (fullName.isNotEmpty() && userDosage != -1 && userfrequency != -1 && userQuantity != -1){
+                val medicine = MedicineEntity(
+                        0,
+                        fullName,
+                        userDosage,
+                        userfrequency,
+                        userQuantity,
+                        medDescription
+                )
+                doAsync {
+                    // do things in the background  // (1)
+                    mDb.MedicineDao().insert(medicine)     // Put the student in database
+                    uiThread {
+                        // make changes to the UI   // (2)
+                        toast("Record : " + medicine.fullName + " inserted.").show()
+                    }
                 }
+            } else {
+                toast("Required input missing").show()
             }
-
-
         }
-
-
-
-
     }
 }
